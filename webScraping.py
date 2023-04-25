@@ -53,3 +53,4 @@ def WebScraping(link, platform):
                 comments.append(data['items'][i]['snippet']['topLevelComment']['snippet']['textDisplay'])
         result["comments"] = comments
         return result
+    

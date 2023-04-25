@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Video Search</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search for videos...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="videos-container">
+        <h2>Top 5 most viewed videos:</h2>
+        <table>
+            <tbody id="video-list">
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const searchForm = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
+        const videoList = document.getElementById('video-list');
+
+        searchForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const searchQuery = searchInput.value;
+            fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchQuery}&type=video&order=viewCount&key=AIzaSyAId96TrNTCJd3NJRUrqun-SbiS3eWQ8rM`)
+            .then(response => response.json())
+            .then(data => {
+                let videos = '';
+                data.items.forEach(item => {
+                    const videoId = item.id.videoId;
+                    const videoTitle = item.snippet.title;
+                    const thumbnailUrl = item.snippet.thumbnails.medium.url;
+                    videos += `
+                        <tr>
+                            <td><img src="${thumbnailUrl}" alt="${videoTitle}"></td>
+                            <td><a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">${videoTitle}</a></td>
+                        </tr>
+                    `;
+                });
+                videoList.innerHTML = videos;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

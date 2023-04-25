@@ -48,6 +48,6 @@ def multipleAnalysis():
         return render_template('multipleAnalysisReport.html',CourseInfo=CourseInfo)
     
 
-@app.route('/aboutus')
-def aboutus():
-    return render_template('aboutUs.html')
+@app.route('/search')
+def search():
+    return render_template('search.html')
