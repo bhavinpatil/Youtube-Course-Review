@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>YouTube Video Search</title>
     <meta charset="UTF-8">
@@ -10,7 +11,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             text-align: left;
             padding: 8px;
         }
@@ -25,6 +27,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="search-container">
         <form id="search-form">
@@ -44,30 +47,31 @@
         const searchInput = document.getElementById('search-input');
         const videoList = document.getElementById('video-list');
 
-        searchForm.addEventListener('submit', function(event) {
+        searchForm.addEventListener('submit', function (event) {
             event.preventDefault();
             const searchQuery = searchInput.value;
             fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchQuery}&type=video&order=viewCount&key=AIzaSyAId96TrNTCJd3NJRUrqun-SbiS3eWQ8rM`)
-            .then(response => response.json())
-            .then(data => {
-                let videos = '';
-                data.items.forEach(item => {
-                    const videoId = item.id.videoId;
-                    const videoTitle = item.snippet.title;
-                    const thumbnailUrl = item.snippet.thumbnails.medium.url;
-                    videos += `
+                .then(response => response.json())
+                .then(data => {
+                    let videos = '';
+                    data.items.forEach(item => {
+                        const videoId = item.id.videoId;
+                        const videoTitle = item.snippet.title;
+                        const thumbnailUrl = item.snippet.thumbnails.medium.url;
+                        videos += `
                         <tr>
                             <td><img src="${thumbnailUrl}" alt="${videoTitle}"></td>
                             <td><a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">${videoTitle}</a></td>
                         </tr>
                     `;
+                    });
+                    videoList.innerHTML = videos;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-                videoList.innerHTML = videos;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
         });
     </script>
 </body>
+
 </html>
